@@ -1,11 +1,14 @@
 module.exports = (mongoose) => {
     const schema = mongoose.Schema(
         {
+            author: {type: String, required: true},
             title: {type: String, required: true},
             content: {type: String, required: true},
             likes: Number,
         },
-        {timestamps: true}
+        {
+            timestamps: true
+        }
     );
 
     schema.method("toJSON", function () {
@@ -13,5 +16,6 @@ module.exports = (mongoose) => {
         object.id = _id;
         return object;
     });
+
     return mongoose.model("tweet", schema);
 }

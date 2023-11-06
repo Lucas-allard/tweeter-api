@@ -2,10 +2,15 @@ const db = require("../models");
 const Tweet = db.tweets;
 
 exports.findAll = (req, res) => {
-    const title = req.query.title, content = req.query.content, likes = req.query.likes;
+    const title = req.query.title, author = req.query.author, content = req.query.content, likes = req.query.likes;
     const condition = title ? {
         title: {
             $regex: new RegExp(title),
+            $options: "i"
+        }
+    } : author ? {
+        author: {
+            $regex: new RegExp(author),
             $options: "i"
         }
     } : content ? {
@@ -13,7 +18,12 @@ exports.findAll = (req, res) => {
             $regex: new RegExp(content),
             $options: "i"
         }
-    } : likes ? {likes: {$regex: new RegExp(likes), $options: "i"}} : {};
+    } : likes ? {
+        likes: {
+            $regex: new RegExp(likes),
+            $options: "i"
+        }
+    } : {};
 
     Tweet.find(condition)
         .then(data => {
@@ -28,12 +38,13 @@ exports.findAll = (req, res) => {
 }
 
 exports.createTweet = (req, res) => {
-    if (!req.body.title || !req.body.content) {
+    if (!req.body.title || !req.body.content || !req.body.author) {
         res.status(400).send({message: "Content can not be empty!"});
         return;
     }
     const tweet = new Tweet({
         title: req.body.title,
+        author: req.body.author,
         content: req.body.content,
         likes: 0
     });

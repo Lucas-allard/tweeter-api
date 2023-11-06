@@ -30,6 +30,6 @@ require('./routes/tweets')(app);
 
 const PORT = process.env.PORT || 3060;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
 });
